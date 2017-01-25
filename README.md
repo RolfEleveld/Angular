@@ -90,10 +90,16 @@ the Class is the code that supports the view. It is created with TypeScript and 
 export class AppComponent {
     pageTitle: string = 'Acme Product Management';
 }```  
-The convention is to give a Class the name of the feature followed by the word Component. The class is identified by the class keyword. The Component Name is referenced when used in Code. The export keyword makes this class available to other code in the application. Because the script now exports something the module loader wil load this class dynamically, so no script tag is required to load.  
+The convention is to give a Class the name of the feature followed by the word Component using PascalCase. The class is identified by the class keyword. The Component Name is referenced when used in Code. The export keyword makes this class available to other code in the application. 
+Because the script now exports something the module loader wil load this class dynamically, so no script tag is required to load.  
 The class only contains a property, a data element having a camelCase Name using a Noun describing the use of the data followed by a : and the data type followed optionally by = and the value assigned.  
 The Methods of the class are usually following all the properties of a class. The naming convention is to use verbs that describe the action the method performs given in camelCase as well.  
 The Angular @Component() decorator function that defines the metadata of a component and adds that metadata to a class, its members or its method arguments. The decorator must immediately precede the object it describes (note in the example there is no ; after the function. 
 This is similar to attributes used in other languages. The object passed into the function only has 2 properties in the example case. The selector gives a means of a directive by which use the class in HTML in the example that would be <pm-app />. Every component must always specify a layout, where the HTML fragment is specified to render the class.  
 Angular is modular, each library is a collection of modules [see](https://www.npmjs.com/~angular) for a list of standard modules e.g. @angular/core and @angular/http. Modules need to be loaded. To tell Angular where to find the component the import statement is added on top of the code. 
-This statement uses the import keyword, { <Member Name> } from <Angular library or module name>. 
+This statement uses the import keyword, { <Member Name> } from <Angular library or module name>.  
+Bootstrapping the component to be loaded by Angular. The index.html is the only true html page, hence SPA. The Index.Html file contans a HTML tag for the class: <pm-app />. 
+The rest is done through the system.config.js file which is loaded from the index.html file. This file calls the main.js file in the app folder after the call in teh index.html: System.import('app').catch(function(err){ console.error(err); });  
+The main.ts loads the app.module which contains reference to the AppComponent section. The appModule is defined with the Angular @NgModule() decorator function and this defines the module for the application. 
+The properties of the passed into the function define the imported Modules that are made available to all classes in this module. The declarations property adds a list of Components defined in this module, and the bootstrap property defines the component that initiates the functionality.
+
