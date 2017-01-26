@@ -1,5 +1,5 @@
 # Angular Course notes
-Notes for the [cource from Deborah](https://app.pluralsight.com/player?course=angular-2-getting-started-update&author=deborah-kurata&name=angular-2-getting-started-update-m2&clip=8&mode=live)
+Notes for the [cource from Deborah](https://app.pluralsight.com/player?course=angular-2-getting-started-update&author=deborah-kurata&name=angular-2-getting-started-update-m5&clip=0&mode=live)
 
 ## Anatomy
 Applications = Component[] + Services[]
@@ -80,6 +80,7 @@ This points the app from the ./main.js file and all references will be js files 
 ## Components
 An application is a set of components, that work together. As stated in the Anatomy a component is defined as below:  
 Component = Template + class ( propert[], method[]) + metadata  
+By convesntion each feature of an application has its own folder under the app folder in the application.  
 The Template has a view layout, defined in HTML and includes binding and directives.  
 the Class is the code that supports the view. It is created with TypeScript and contains properties (Data), the Methods (Logic) and metadata that is used by Angular which is defined with a decorator.
 ``` import { Component } from '@angular/core';
@@ -99,7 +100,31 @@ This is similar to attributes used in other languages. The object passed into th
 Angular is modular, each library is a collection of modules [see](https://www.npmjs.com/~angular) for a list of standard modules e.g. @angular/core and @angular/http. Modules need to be loaded. To tell Angular where to find the component the import statement is added on top of the code. 
 This statement uses the import keyword, { <Member Name> } from <Angular library or module name>.  
 Bootstrapping the component to be loaded by Angular. The index.html is the only true html page, hence SPA. The Index.Html file contans a HTML tag for the class: <pm-app />. 
-The rest is done through the system.config.js file which is loaded from the index.html file. This file calls the main.js file in the app folder after the call in teh index.html: System.import('app').catch(function(err){ console.error(err); });  
+The rest is done through the system.config.js file which is loaded from the index.html file. This file calls the main.js file in the app folder after the call in the index.html: System.import('app').catch(function(err){ console.error(err); });  
 The main.ts loads the app.module which contains reference to the AppComponent section. The appModule is defined with the Angular @NgModule() decorator function and this defines the module for the application. 
 The properties of the passed into the function define the imported Modules that are made available to all classes in this module. The declarations property adds a list of Components defined in this module, and the bootstrap property defines the component that initiates the functionality.
+
+## Templates
+One can use an in-line template as a single lien with "" or an multi-line template with ``(ES2015 Back Ticks). This keeps the code and the view for that code in one file. Downside is that the intellisense does not work.
+One can reference a HTML template file using the templateUrl: property linking to a full reference of a HTML file from the index.html. By convention the name of the template is the same name as the component followed by html
+
+## Components as directives
+The components have selectors defined that can be used in other components templates. The directive needs to be declared in the module or imported into the module. In the app.module.ts in the @NgModule add the declaration for the directive (case sensitive).
+Also make sure to include the import statement for that component. Directives extend the HTML structure.
+
+## Binding with Logic
+Binding is always defined in the template. Interpolation is used with {{}} this is a one-way binding from property to a place. One can use concatenation such as {{'Title: ' + pageTitle}}, maths as {{2*20+1}} and function calls {{'Title: '+ getTitle()}}. Which could be leveraged by:
+```export class AppComonent {
+    pageTitle: string = 'Acme Product Management';
+    getTitle(): string {};
+}```
+Binding can be handled inside of html tags such as template interpolation:<h1>{{pageTitle}}</h1> or with property assignment such as <h1 innerText={{pageTitle}}></h1>.
+
+## Angular Directives
+Angular's structural directives start with a * in the name.
+*ngIf if the value is false then the html directive in which the angular directive is used will be removed from HTML DOM.
+*ngFor will iterate over the iterable list and render the html directive for each entry in the iteration. The *ngFor='let item of items' will take an entry from the items property and assign itme to every entry while creating the dom structure for that entry.
+In ES2015 For..of iterates over the iterable and For..in iterates over the index.
+
+
 
