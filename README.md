@@ -1,5 +1,5 @@
 # Angular Course notes
-Notes for the [cource from Deborah](https://app.pluralsight.com/player?course=angular-2-getting-started-update&author=deborah-kurata&name=angular-2-getting-started-update-m5&clip=0&mode=live)
+Notes for the [cource from Deborah](https://app.pluralsight.com/player?course=angular-2-getting-started-update&author=deborah-kurata&name=angular-2-getting-started-update-m7&clip=0&mode=live)
 
 ## Anatomy
 Applications = Component[] + Services[]
@@ -151,7 +151,7 @@ Pipes can be concatenated such as: {{ product.price | currency | lowercase }} or
 
 ## More on components
 Strong type the components and use interfaces, encapsulate types, have lifecycle hooks, use custom pipes and have relative paths using module ID.
-Type all properties and methods of a class. Type also all parameters of the methods. when not knowing a type one can use any or any[] to define teh type is not known. on these all type chacking is lost. to help here one can use the interface.
+Type all properties and methods of a class. Type also all parameters of the methods. when not knowing a type one can use any or any[] to define the type is not known. on these all type chacking is lost. to help here one can use the interface.
 Interfaces are development and compile time addidtions from TypeScript only. an example:
 ```export interface IProduct {
     productId: number;
@@ -163,3 +163,36 @@ Interfaces are development and compile time addidtions from TypeScript only. an 
 }```
 To use the interface as a data type one needs to ```import { IProduct } from './product';``` and use the interface in a property or method: ```products : IProduct[] = [...];```.
 Strong typing will allow for Intellisense support to validate the definitions in the component.
+
+## Encapsulating component styles
+Using ```styles``` and ```styleUrls``` in the @component segment. Wehn using styles the value is a list of , separated style definitions. better is to use styleUrls, which is a list of , separated references to css files referenced from the index.html file.
+This way styles will be uniquely defined for the styles in the component.
+
+## Component lifecycle hooks
+Look for the most common lifecycle hooks: OnInit, OnChanges and OnDestroy. See following example on using a LifeCycle hook:
+```import { Component, OnInit } from '@angular/core';
+export class ProductListComponent implements OnInit {
+    pageTitle: string = 'Product List';
+    ngOnInit(): void { console.log('In Oninit');
+}```
+
+## Transforming data with custom pipes
+The pipe is using an interface PipeTransform that has one method transform. The custom pipe needs a decorator thet this is can be used as a pipe. The following is a full example of the implementation of a custom pipe:
+```import {Pipe, PipeTransform } from '@angular/core';
+@Pipe({name:'productFilter'})
+export class ProductFilterPipe implements PipeTransform {
+    transform(value:IProduct[], filterBy:string):IProduct[]{}
+}```
+Before one can use the custom pipe it needs to be added to the declarations section of the module in which it is used.
+
+## Relative paths and ModuleID
+When referencing paths inside of a module the relative path from the index.html is required. 
+In the .component.ts file the @component() decorater can be given an object with a moduleId property setting this to module.id (as long as coded in Common JS module format using SystemJS module loader, the module.id contains the absolute path to the module).
+This can then be re-used in the paths as follows:
+```@component({
+    selector: 'rm-products',
+    moduleId: module.id,
+    templateUrl: 'product-list.component.html',
+    styleUrls: ['product-list.component.css']
+})```
+The templete and style Urls will resove to the full reletive path from the index.html
