@@ -126,5 +126,40 @@ Angular's structural directives start with a * in the name.
 *ngFor will iterate over the iterable list and render the html directive for each entry in the iteration. The *ngFor='let item of items' will take an entry from the items property and assign itme to every entry while creating the dom structure for that entry.
 In ES2015 For..of iterates over the iterable and For..in iterates over the index.
 
+## Property binding
+Binding of DOM with component values e.g. <img [src]='product.imageUrl'> where between [] is the binding target and between '' is the binding source. The same using interpolation would be <img src={{product.imageUrl}}>.
+Inside of interpolation JavaScript Expressions can be used e.g. {{showImage ? 'Hide' : 'Show'}}.
 
+## Event binding
+Binding of DOM events to methods on a component e.g. <button (click)='toggleImage()'> where between () is the target event and between '' is the template statement targetting the component method.
+see [events](https://developer.mozilla.org/en-US/docs/Web/Events) for a list of possible target events.
+To define a method in typescript, after the properties of a class:
+```showImage : boolean - false;
+toggeleImage(): void {
+    this.showImage = !this.showImage;
+}```
+The above example flips the value.
 
+## Two way binding
+To use two way binding in Angular use the ngModel directive with [] and () as follows: <input [(ngModel)]='listFilter'> which associates the property binding and sends events back to listFilter. 
+Make sure to import { FormsModule } from '@angular/forms'; and include FormsModule in the @NgModule ({ imports: }) segment in the app.module.ts. Note that this is an external feature that is used so it is in imports, not in declaration, where self-defined segments go.
+
+## Transforming data with pipes
+An example: {{ product.productCode | lowercase }} the code is then automatically transformed in interpolation before rendering.
+Another example using binding: <img [title]='product.productName | uppercase'> which will convert the text to upper case in the binding process.
+Pipes can be concatenated such as: {{ product.price | currency | lowercase }} or given parameters such as {{product.Price | currency:'USD':true:'1.2-2'}}.
+
+## More on components
+Strong type the components and use interfaces, encapsulate types, have lifecycle hooks, use custom pipes and have relative paths using module ID.
+Type all properties and methods of a class. Type also all parameters of the methods. when not knowing a type one can use any or any[] to define teh type is not known. on these all type chacking is lost. to help here one can use the interface.
+Interfaces are development and compile time addidtions from TypeScript only. an example:
+```export interface IProduct {
+    productId: number;
+    productName: string;
+    productCode: string;
+    releaseDate: Date;
+    price: number;
+    calculateDiscount(percent:number): number;
+}```
+To use the interface as a data type one needs to ```import { IProduct } from './product';``` and use the interface in a property or method: ```products : IProduct[] = [...];```.
+Strong typing will allow for Intellisense support to validate the definitions in the component.
